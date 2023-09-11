@@ -73,7 +73,7 @@ class _ProductsListbuilderState extends State<ProductsListbuilder> {
           return GestureDetector(
             onTap: (){
               print("${products[index].id}");
-              cartitems +=1 ;
+              Navigator.pushNamed(context, "/Product_Details" , arguments: products[index] );
 
 
             },
