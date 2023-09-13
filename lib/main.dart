@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           scaffoldBackgroundColor: Colors.white,
         ),
-        initialRoute:'/' ,
+        initialRoute:'/splash' ,
         routes: {
           '/': (context) => Homepage(),
           '/splash'  : (context) => const SplashScreen() ,
