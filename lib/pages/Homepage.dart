@@ -1,13 +1,16 @@
+
 import 'package:click_n_ship/pages/Cartpage.dart';
 import 'package:click_n_ship/pages/Profilepage.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'ProductsPage.dart';
 import 'package:badges/badges.dart' as badges;
-int cartitems = 0;
+
+
+
 
 class Homepage extends StatefulWidget {
-
 
 
   @override
@@ -16,7 +19,28 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
   int index = 0;
-  String pagename = "Click 'N Ship";
+
+  int? cartitems;
+
+
+  @override
+  void initState() {
+    intialGetSavedData();
+    super.initState();
+
+  }
+  Future<void> intialGetSavedData() async {
+     final SharedPreferences sharedprefs = await SharedPreferences.getInstance();
+     cartitems = sharedprefs.getInt("key")?? 0 ;
+
+  }
+  
+  Future<void> storedata() async {
+    final SharedPreferences sharedprefs = await SharedPreferences.getInstance();
+    sharedprefs.setInt("key", cartitems!);
+
+  }
+
 
   Map<int, String> pages = {
     0: "Click 'N Ship",
@@ -24,16 +48,12 @@ class _HomepageState extends State<Homepage> {
     2: "Profile ",
   };
 
-  @override
-  void initState() {
-    super.initState();
 
-  }
 
   final screens = [
-    ProductsPage( ),
+     ProductsPage( ),
     Cartpage(),
-    ProfilePage(),
+     ProfilePage(),
   ];
 
   void  updatehome(){
@@ -68,11 +88,12 @@ class _HomepageState extends State<Homepage> {
           items:  [
             Icon(Icons.home, size: 30, color: Colors.white),
             badges.Badge(
-              showBadge: cartitems > 0 ,
-              badgeContent: Text("${cartitems}"),
+              showBadge: ( cartitems != null? cartitems! > 0 : false) ,
+              badgeContent: Text("${cartitems ?? ""}" ),
                 child: Icon(Icons.shopping_cart, size: 30, color: Colors.white)),
-            Icon(Icons.person, size: 30, color: Colors.white),
-          ]),
+            Icon(Icons.settings, size: 30, color: Colors.white),
+          ],
+      ),
     );
   }
 
@@ -93,4 +114,7 @@ class _HomepageState extends State<Homepage> {
     }
     return widget;
   }
+
+
+
 }

@@ -7,8 +7,6 @@ class Circular_small_Button extends StatelessWidget {
   final VoidCallback onPress;
   final Icon icon ;
 
-
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

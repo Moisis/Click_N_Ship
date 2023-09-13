@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 
 
 
+
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -28,15 +30,13 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           scaffoldBackgroundColor: Colors.white,
         ),
-        initialRoute:'/' ,
+        initialRoute:'/splash' ,
         routes: {
           '/': (context) => Homepage(),
-          // '/cartpage'  : (context) => Cartpage() ,
           '/splash'  : (context) => const SplashScreen() ,
           '/Login_Page'  : (context) => Login() ,
           '/SignUp_Page'  : (context) => SignUp_Page() ,
           '/Product_Details'  : (context) => Product_Details()
-          // '/lol2'  : (context) => lol() ,
 
         });
   }

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class Login extends StatefulWidget {
   const Login({
@@ -106,14 +107,26 @@ class _LoginState extends State<Login> {
                       backgroundColor: Color(0xFF355291),
 
                     ),
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState?.validate() ?? false) {
+                        try {
+                          await FirebaseAuth.instance
+                              .signInWithEmailAndPassword(
+                              email: _controllerUsername.text.trim(),
+                              password: _controllerPassword.text.trim())
+                              .then((value) =>
+                              Navigator.pushNamedAndRemoveUntil(
+                                  context, '/', (route) => false));
+                        }on FirebaseAuthException catch(e){
+                          Fluttertoast.showToast(msg: e.message.toString() , gravity: ToastGravity.SNACKBAR);
+                        }
 
-                        FirebaseAuth.instance
-                            .signInWithEmailAndPassword(
-                                email: _controllerUsername.text,
-                                password: _controllerPassword.text)
-                            .then((value) => Navigator.pushNamed(context, '/'));
+
+
+
+
+
+                        ;
                       }
                     },
                     child: const Text("Login"),

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SignUp_Page extends StatefulWidget {
   const SignUp_Page({
@@ -14,8 +15,10 @@ class _SignUp_PageState extends State<SignUp_Page> {
   final GlobalKey<FormState> _formKey = GlobalKey();
 
   final FocusNode _focusNodePassword = FocusNode();
+  final FocusNode _focusNodeConfirmPassword = FocusNode();
   final TextEditingController _controllerUsername = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
+  final TextEditingController _corfirmPassword = TextEditingController();
 
   bool _obscurePassword = true;
 
@@ -96,8 +99,8 @@ class _SignUp_PageState extends State<SignUp_Page> {
               ),
               const SizedBox(height: 10),
               TextFormField(
-                controller: _controllerPassword,
-                focusNode: _focusNodePassword,
+                controller: _corfirmPassword,
+                focusNode: _focusNodeConfirmPassword,
                 obscureText: _obscurePassword,
                 keyboardType: TextInputType.visiblePassword,
                 decoration: InputDecoration(
@@ -120,8 +123,11 @@ class _SignUp_PageState extends State<SignUp_Page> {
                   ),
                 ),
                 validator: (String? value) {
-                  if (value == null || value.isEmpty) {
+                  if (value == null || value.isEmpty ) {
                     return "Please enter password.";
+                  }else if(_controllerPassword.text.trim() != _corfirmPassword.text.trim()){
+                    return "Password Must match";
+
                   }
 
                   return null;
@@ -139,15 +145,19 @@ class _SignUp_PageState extends State<SignUp_Page> {
                         backgroundColor: Color(0xFF355291),
 
                     ),
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState?.validate() ?? false) {
-                        FirebaseAuth.instance.signOut();
 
-                        FirebaseAuth.instance
-                            .signInWithEmailAndPassword(
-                            email: _controllerUsername.text,
-                            password: _controllerPassword.text)
-                            .then((value) => Navigator.pushNamed(context, '/'));
+                        try {
+                          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                              email: _controllerUsername.text.trim(),
+                              password: _controllerPassword.text.trim())
+                              .then((value) =>
+                              Navigator.pushNamedAndRemoveUntil(
+                                  context, "/", (route) => false));
+                        }on FirebaseAuthException catch(e){
+                          Fluttertoast.showToast(msg: e.message.toString() , gravity: ToastGravity.SNACKBAR);
+                        }
                       }
                     },
                     child: const Text("Sign Up"),
@@ -179,6 +189,7 @@ class _SignUp_PageState extends State<SignUp_Page> {
     _focusNodePassword.dispose();
     _controllerUsername.dispose();
     _controllerPassword.dispose();
+    _corfirmPassword.dispose();
     super.dispose();
   }
 }
