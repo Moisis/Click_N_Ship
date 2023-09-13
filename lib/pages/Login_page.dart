@@ -138,7 +138,8 @@ class _LoginState extends State<Login> {
                       TextButton(
                         onPressed: () {
                           _formKey.currentState?.reset();
-                          Navigator.pushReplacementNamed(context, "/SignUp_Page");
+                          Navigator.pushNamedAndRemoveUntil(context, "/SignUp_Page", (route) => false);
+
                         },
                         child: const Text("Signup"),
                       ),
