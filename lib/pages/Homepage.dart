@@ -3,11 +3,10 @@ import 'package:click_n_ship/pages/Profilepage.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'ProductsPage.dart';
-import 'package:badges/badges.dart' as badges;
-int cartitems = 0;
+
+
 
 class Homepage extends StatefulWidget {
-
 
 
   @override
@@ -16,7 +15,8 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
   int index = 0;
-  String pagename = "Click 'N Ship";
+
+
 
   Map<int, String> pages = {
     0: "Click 'N Ship",
@@ -24,16 +24,13 @@ class _HomepageState extends State<Homepage> {
     2: "Profile ",
   };
 
-  @override
-  void initState() {
-    super.initState();
 
-  }
+
 
   final screens = [
-    ProductsPage( ),
+     ProductsPage( ),
     Cartpage(),
-    ProfilePage(),
+     ProfilePage(),
   ];
 
   void  updatehome(){
@@ -57,9 +54,9 @@ class _HomepageState extends State<Homepage> {
       body: screens[index],
       bottomNavigationBar: CurvedNavigationBar(
           backgroundColor: Colors.grey.shade300,
-          onTap: (selected_index) {
+          onTap: (selectedIndex) {
             setState(() {
-              index = selected_index;
+              index = selectedIndex;
             });
           },
           height: 70,
@@ -67,12 +64,10 @@ class _HomepageState extends State<Homepage> {
           index: index,
           items:  [
             Icon(Icons.home, size: 30, color: Colors.white),
-            badges.Badge(
-              showBadge: cartitems > 0 ,
-              badgeContent: Text("${cartitems}"),
-                child: Icon(Icons.shopping_cart, size: 30, color: Colors.white)),
-            Icon(Icons.person, size: 30, color: Colors.white),
-          ]),
+            Icon(Icons.shopping_cart, size: 30, color: Colors.white),
+            Icon(Icons.settings, size: 30, color: Colors.white),
+          ],
+      ),
     );
   }
 
@@ -93,4 +88,9 @@ class _HomepageState extends State<Homepage> {
     }
     return widget;
   }
+
+
+
+
+
 }

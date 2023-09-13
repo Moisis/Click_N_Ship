@@ -63,7 +63,7 @@ class _ProductsPageState extends State<ProductsPage> {
               ),
               CategoriesWidget(),
               const SizedBox(height: 30),
-                 SingleChildScrollView(child: Item_Widget()),
+                 const SingleChildScrollView(child: Item_Widget()),
             ],
           ),
       ),

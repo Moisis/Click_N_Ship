@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -17,7 +18,11 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   route() {
-    Navigator.pushReplacementNamed(context, '/');
+    if (FirebaseAuth.instance.currentUser ==null) {
+      Navigator.pushReplacementNamed(context, '/Login_Page');
+    }else{
+      Navigator.pushReplacementNamed(context, '/');
+    }
   }
 
   @override

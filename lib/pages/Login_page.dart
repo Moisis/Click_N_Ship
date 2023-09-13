@@ -1,149 +1,164 @@
-
-import 'dart:math';
-
-import 'package:click_n_ship/widgets/BackgroundTab.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
-class Login_Page extends StatefulWidget {
-  const Login_Page({super.key});
+class Login extends StatefulWidget {
+  const Login({
+    Key? key,
+  }) : super(key: key);
 
   @override
-  State<Login_Page> createState() => _Login_PageState();
+  State<Login> createState() => _LoginState();
 }
 
-class _Login_PageState extends State<Login_Page> {
+class _LoginState extends State<Login> {
+  final GlobalKey<FormState> _formKey = GlobalKey();
+
+  final FocusNode _focusNodePassword = FocusNode();
+  final TextEditingController _controllerUsername = TextEditingController();
+  final TextEditingController _controllerPassword = TextEditingController();
+
+  bool _obscurePassword = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[300],
-      body: SafeArea(
-        child: Center(
+      body: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(30.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height: 50),
-              // logo
-              const Image(image: AssetImage("assets/Logo/Logo(Nobg).png"),height: 200,),
-              const SizedBox(height: 50),
-
-              // welcome back, you've been missed!
+              Image.asset("assets/Logo/Logo(Nobg).png",height: 190,),
               Text(
-                'Welcome back ',
-                style: TextStyle(
-                  color: Colors.grey[700],
-                  fontSize: 16,
-                ),
+                "Welcome back",
+                style: Theme.of(context).textTheme.headlineMedium,
               ),
+              Text(
+                "Login to your account",
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+              const SizedBox(height: 40),
+              TextFormField(
+                controller: _controllerUsername,
+                keyboardType: TextInputType.name,
+                decoration: InputDecoration(
+                  labelText: "Email",
+                  prefixIcon: const Icon(Icons.email_outlined),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                onEditingComplete: () => _focusNodePassword.requestFocus(),
+                validator: (String? value) {
+                  if (value == null || value.isEmpty) {
+                    return "Please enter username.";
+                  }
 
-              const SizedBox(height: 25),
-
-              // username textfield
-              // MyTextField(
-              //   controller: usernameController,
-              //   hintText: 'Username',
-              //   obscureText: false,
-              // ),
-
+                  return null;
+                },
+              ),
               const SizedBox(height: 10),
-
-              // password textfield
-              // MyTextField(
-              //   controller: passwordController,
-              //   hintText: 'Password',
-              //   obscureText: true,
-              // ),
-
-              const SizedBox(height: 10),
-
-              // forgot password?
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      'Forgot Password?',
-                      style: TextStyle(color: Colors.grey[600]),
-                    ),
-                  ],
+              TextFormField(
+                controller: _controllerPassword,
+                focusNode: _focusNodePassword,
+                obscureText: _obscurePassword,
+                keyboardType: TextInputType.visiblePassword,
+                decoration: InputDecoration(
+                  labelText: "Password",
+                  prefixIcon: const Icon(Icons.password_outlined),
+                  suffixIcon: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          _obscurePassword = !_obscurePassword;
+                        });
+                      },
+                      icon: _obscurePassword
+                          ? const Icon(Icons.visibility_outlined)
+                          : const Icon(Icons.visibility_off_outlined)),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
+                validator: (String? value) {
+                  if (value == null || value.isEmpty) {
+                    return "Please enter password.";
+                  }
+
+                  return null;
+                },
               ),
-
-              const SizedBox(height: 25),
-
-              // sign in button
-
-
-              const SizedBox(height: 50),
-
-              // or continue with
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Divider(
-                        thickness: 0.5,
-                        color: Colors.grey[400],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Text(
-                        'Or continue with',
-                        style: TextStyle(color: Colors.grey[700]),
-                      ),
-                    ),
-                    Expanded(
-                      child: Divider(
-                        thickness: 0.5,
-                        color: Colors.grey[400],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 50),
-
-              // google + apple sign in buttons
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  // google button
-                 // SquareTile(imagePath: 'lib/images/google.png'),
-
-                  SizedBox(width: 25),
-
-                  // apple button
-                //  SquareTile(imagePath: 'lib/images/apple.png')
-                ],
-              ),
-
-              const SizedBox(height: 50),
-
-              // not a member? register now
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              const SizedBox(height: 60),
+              Column(
                 children: [
-                  Text(
-                    'Not a member?',
-                    style: TextStyle(color: Colors.grey[700]),
-                  ),
-                  const SizedBox(width: 4),
-                  const Text(
-                    'Register now',
-                    style: TextStyle(
-                      color: Colors.blue,
-                      fontWeight: FontWeight.bold,
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size.fromHeight(50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      backgroundColor: Color(0xFF355291),
+
                     ),
+                    onPressed: () async {
+                      if (_formKey.currentState?.validate() ?? false) {
+                        try {
+                          await FirebaseAuth.instance
+                              .signInWithEmailAndPassword(
+                              email: _controllerUsername.text.trim(),
+                              password: _controllerPassword.text.trim())
+                              .then((value) =>
+                              Navigator.pushNamedAndRemoveUntil(
+                                  context, '/', (route) => false));
+                        }on FirebaseAuthException catch(e){
+                          Fluttertoast.showToast(msg: e.message.toString() , gravity: ToastGravity.SNACKBAR);
+                        }
+
+
+
+
+
+
+                        ;
+                      }
+                    },
+                    child: const Text("Login"),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text("Don't have an account?"),
+                      TextButton(
+                        onPressed: () {
+                          _formKey.currentState?.reset();
+                          Navigator.pushNamedAndRemoveUntil(context, "/SignUp_Page", (route) => false);
+
+                        },
+                        child: const Text("Signup"),
+                      ),
+                    ],
                   ),
                 ],
-              )
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _focusNodePassword.dispose();
+    _controllerUsername.dispose();
+    _controllerPassword.dispose();
+    super.dispose();
   }
 }

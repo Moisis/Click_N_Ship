@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "517631139573",
+    "project_id": "click--n-ship",
+    "storage_bucket": "click--n-ship.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:517631139573:android:35a31f657f60a9b4932fbc",
+        "android_client_info": {
+          "package_name": "com.miso.Click_n_ship.click_n_ship"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFYeqMLa-c3kvn9jpOTyTQWHp_5-q9hms"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

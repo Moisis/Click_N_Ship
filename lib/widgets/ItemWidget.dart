@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../models/Product.dart';
 import '../models/Products_list.dart';
-import '../pages/Homepage.dart';
 
 class Item_Widget extends StatefulWidget {
   const Item_Widget({Key? key}) : super(key: key);
@@ -71,10 +70,10 @@ class _ProductsListbuilderState extends State<ProductsListbuilder> {
         itemCount: products.length,
         itemBuilder: (BuildContext context, index) {
           return GestureDetector(
-            onTap: (){
+            onTap: ()  {
               print("${products[index].id}");
-              cartitems +=1 ;
 
+              Navigator.pushNamed(context, "/Product_Details" , arguments: products[index] );
 
             },
             child: Container(
@@ -103,17 +102,14 @@ class _ProductsListbuilderState extends State<ProductsListbuilder> {
                               color: Colors.white),
                         ),
                       ),
-                      Icon(
-                        Icons.favorite_border,
-                        color: Colors.red,
-                      )
+
                     ],
                   ),
                   Container(
                     margin: EdgeInsets.all(3),
                     child: Image.network(
                       "${products[index].thumbnail}",
-                      height: 80,
+                      height: 60,
                     ),
                   ),
                   Container(
@@ -122,7 +118,7 @@ class _ProductsListbuilderState extends State<ProductsListbuilder> {
                       "${products[index].title}",
                       style: TextStyle(
                           fontFamily: "Roboto",
-                          fontSize: 14,
+                          fontSize: 12,
                           color: Color(0xFF355291),
                           fontWeight: FontWeight.bold),
                     ),
@@ -147,7 +143,7 @@ class _ProductsListbuilderState extends State<ProductsListbuilder> {
                           "\$ ${products[index].price}",
                           style: TextStyle(
                             fontFamily: "Roboto",
-                            fontSize: 16,
+                            fontSize: 14,
                             fontWeight: FontWeight.bold,
                             color: Color(0xFF006400),
                           ),
@@ -159,13 +155,8 @@ class _ProductsListbuilderState extends State<ProductsListbuilder> {
               ),
 
             ),
-
-
           );
         });
   }
-  @override
-  void dispose() {
-    super.dispose();
-  }
+
 }
